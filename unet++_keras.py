@@ -12,13 +12,13 @@ dropout_rate = 0.8
 def MFEBBlock(input_tensor, nb_filter, kernel_size=3):
     x = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same')(input_tensor)
     x = Activation('selu')(x)
-    x1 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation=1)(x)
+    x1 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation_rate=1)(x)
     x1= Activation('selu')(x1)
-    x2 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation=2)(x)
+    x2 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation_rate=2)(x)
     x2= Activation('selu')(x2)
-    x3 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation=3)(x)
+    x3 = Conv3D(nb_filter, (kernel_size, kernel_size, kernel_size), padding='same', dilation_rate=3)(x)
     x3= Activation('selu')(x3)
-    out = keras.layers.Concatenate(axis=1)([x, x1, x2, x3])
+    out = keras.layers.Concatenate(axis=4)([x, x1, x2, x3])
     out = Activation('selu')(out)
     out = keras.layers.Add()([out, input_tensor])
     out = Activation('selu')(out)
@@ -45,7 +45,7 @@ def model_build_func(input_shape, n_labels, using_deep_supervision=False):
     K.set_image_data_format("channels_last")
     bn_axis = -1
     inputs = Input(shape=input_shape, name='input_image')
-    out = MFEBBlock(inputs, nb_filternb_filter[0], kernel_size=3)
+    out = MFEBBlock(inputs, 16, kernel_size=3)
 
     conv1_1 = conv_batchnorm_relu_block(out, nb_filter=nb_filter[0])
     pool1 = MaxPool3D((2, 2, 2), strides=(2, 2, 2), name='pool1')(conv1_1)
