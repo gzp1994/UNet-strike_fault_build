@@ -14,7 +14,7 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, ReduceLROnPlateau, TensorBoard
 from keras import backend as keras
-from utils++ import DataGenerator
+from utilspp import DataGenerator
 class TrainValTensorBoard(TensorBoard):
     def __init__(self, log_dir='./log', **kwargs):
         # Make the original `TensorBoard` log to a subdirectory 'training'
@@ -68,7 +68,7 @@ params = {'batch_size':1, 'dim':(n1,n2,n3),'n_channels':1,'shuffle':True}
 train = DataGenerator(dpath=sxpath,fpath=kxpath,data_IDs=tdata_ids,**params)
 valid = DataGenerator(dpath=sxpath,fpath=kxpath,data_IDs=vdata_ids,**params)
 
-from unet++_keras import *
+from unetpp_keras import *
 # model = unet(input_size=(None, None, None,1))
 model= model_build_func((None, None, None,1), 1, using_deep_supervision=False)
 # Fit the model
